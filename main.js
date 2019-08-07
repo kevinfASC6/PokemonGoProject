@@ -5,6 +5,16 @@ function createNode(element) {
   function append(parent, el) {
   return parent.appendChild(el);
   }
+
+  var map;
+
+  function initMap(){
+
+   map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 4,
+        center: {lat:1,lng:1}
+        });
+  }
   let Pokemon;
   let peopleArray = []
   var numUsers = 960;
@@ -14,7 +24,9 @@ function createNode(element) {
   .then((resp) => resp.json())
   .then(function(data) {
     Pokemon = data;
+    for(let i=0; i<50;i++){
     getRandomPokemon(Pokemon)
+    }
   });
 
 
@@ -28,11 +40,15 @@ function createNode(element) {
         console.log(pokeData);
         
         if(pokeData.sprites.front_shiny != null){
-            document.getElementById('pokeImg').src = pokeData.sprites.front_shiny
+            var myLatLng = {lat: -90 + Math.random() * 180, lng: -180 + Math.random() * 360};
+            var iconBase = pokeData.sprites.front_shiny
+            var marker = new google.maps.Marker({
+            position: myLatLng,
+            icon: iconBase,
+            map: map
+            });
         } else {
             getRandomPokemon()
         }
-    // console.log(Pokemon)
-    // document.getElementById('pokemon').innerHTML = Pokemon.results[0].name
     })
   }
